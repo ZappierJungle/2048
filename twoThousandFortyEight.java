@@ -108,7 +108,7 @@ public class twoThousandFortyEight {
 			return false;
 
 		case "d":
-			for (int row = 0; row < cols; row++) {
+			for (int row = 0; row < rows; row++) {
 				for (int col = cols - 1; col > 0; col--) {
 					if (board[row][col - 1] != 0 && (board[row][col] == 0 || board[row][col - 1] == board[row][col])) {
 						return true;
@@ -250,7 +250,7 @@ public class twoThousandFortyEight {
 			int row = rand.nextInt(rows);
 			int col = rand.nextInt(cols);
 			if (board[row][col] == 0) {
-				int number = rand.nextInt(10) < 9 ? 2 : 4;
+				int number = rand.nextInt(10) < 9 ? 3 : 6;
 				board[row][col] = number;
 				valid = true;
 			}
