@@ -4,30 +4,32 @@ import java.util.Scanner;
 public class twoThousandFortyEight {
 	static boolean freeplay = false;
 	static int score = 0;
+	static int rows = 4;
+	static int cols = 4;
 
 	public static void main(String[] args) {
 		Scanner scanner = new Scanner(System.in);
-		int rows = 4;
-		int cols = 4;
 		int characterLimit = 4;
 		int board[][] = new int[rows][cols];
-		addNumber(board, rows, cols);
-		addNumber(board, rows, cols);
-		printBoard(board, rows, cols, characterLimit);
-		while (!gameEnd(board, rows, cols, scanner)) {
-			playerMove(board, scanner, rows, cols);
-			addNumber(board, rows, cols);
+		addNumber(board);
+		addNumber(board);
+		printBoard(board, characterLimit);
+		while (!gameEnd(board, scanner)) {
+			playerMove(board, scanner);
+			addNumber(board);
 			for (int row = 0; row < rows; row++) {
 				for (int col = 0; col < cols; col++) {
-					if (numberToString(board[row][col], characterLimit).length() > characterLimit) characterLimit++;
+					if (numberToString(board[row][col], characterLimit).length() > characterLimit)
+						characterLimit++;
 				}
 			}
-			printBoard(board, rows, cols, characterLimit);
+			printBoard(board, characterLimit);
 		}
+		System.out.println("Your final score was " + score);
 		scanner.close();
 	}
 
-	private static boolean gameEnd(int[][] board, int rows, int cols, Scanner scanner) {
+	private static boolean gameEnd(int[][] board, Scanner scanner) {
 		for (int row = 0; row < rows; row++) {
 			for (int col = 0; col < cols; col++) {
 				if (board[row][col] == 2048 && freeplay == false) {
@@ -36,7 +38,8 @@ public class twoThousandFortyEight {
 					System.out.println("Would you like to continue? Yes(y) or No(n)");
 					while (true) {
 						input = scanner.nextLine();
-						if (input.equals("y") || input.equals("n")) break;
+						if (input.equals("y") || input.equals("n"))
+							break;
 						System.out.println("Invalid input ");
 					}
 					if (input.equals("y")) {
@@ -47,25 +50,25 @@ public class twoThousandFortyEight {
 				}
 			}
 		}
-		if (validMove(board, "w", false, rows, cols) || validMove(board, "s", false, rows, cols)
-				|| validMove(board, "a", false, rows, cols) || validMove(board, "d", false, rows, cols)) {
+		if (validMove(board, "w", false) || validMove(board, "s", false) || validMove(board, "a", false) || validMove(board, "d", false)) {
 			return false;
 		}
 		System.out.println("You filled the board up and have no moves left, meaning you lost.");
 		return true;
 	}
 
-	private static void playerMove(int[][] board, Scanner scanner, int rows, int cols) {
+	private static void playerMove(int[][] board, Scanner scanner) {
 		String playerMove;
 		System.out.println("(w) up, (a) left, (s) down, or (d) right");
 		while (true) {
 			playerMove = scanner.nextLine();
-			if (validMove(board, playerMove, true, rows, cols)) break;
+			if (validMove(board, playerMove, true))
+				break;
 		}
-		combineNumbers(board, playerMove, rows, cols);
+		combineNumbers(board, playerMove);
 	}
 
-	private static boolean validMove(int[][] board, String direction, boolean update, int rows, int cols) {
+	private static boolean validMove(int[][] board, String direction, boolean update) {
 		switch (direction) {
 		case "w":
 			for (int row = 1; row < rows; row++) {
@@ -124,11 +127,11 @@ public class twoThousandFortyEight {
 		}
 	}
 
-	private static void combineNumbers(int[][] board, String playerMove, int rows, int cols) {
+	private static void combineNumbers(int[][] board, String playerMove) {
 		switch (playerMove) {
 		case "w":
 			for (int i = 0; i < rows; i++) {
-				moveUp(board, rows, cols);
+				moveUp(board);
 			}
 			for (int col = 0; col < cols; col++) {
 				for (int row = 1; row < rows; row++) {
@@ -140,12 +143,12 @@ public class twoThousandFortyEight {
 				}
 			}
 			for (int i = 0; i < rows; i++) {
-				moveUp(board, rows, cols);
+				moveUp(board);
 			}
 			break;
 		case "s":
 			for (int i = 0; i < rows; i++) {
-				moveDown(board, rows, cols);
+				moveDown(board);
 			}
 			for (int row = rows - 1; row > 0; row--) {
 				for (int col = 0; col < cols; col++) {
@@ -157,12 +160,12 @@ public class twoThousandFortyEight {
 				}
 			}
 			for (int i = 0; i < rows; i++) {
-				moveDown(board, rows, cols);
+				moveDown(board);
 			}
 			break;
 		case "a":
 			for (int i = 0; i < cols; i++) {
-				moveLeft(board, rows, cols);
+				moveLeft(board);
 			}
 			for (int col = 1; col < cols; col++) {
 				for (int row = 0; row < rows; row++) {
@@ -174,12 +177,12 @@ public class twoThousandFortyEight {
 				}
 			}
 			for (int i = 0; i < cols; i++) {
-				moveLeft(board, rows, cols);
+				moveLeft(board);
 			}
 			break;
 		case "d":
 			for (int i = 0; i < cols; i++) {
-				moveRight(board, rows, cols);
+				moveRight(board);
 			}
 			for (int col = cols - 1; col > 0; col--) {
 				for (int row = 0; row < rows; row++) {
@@ -191,7 +194,7 @@ public class twoThousandFortyEight {
 				}
 			}
 			for (int i = 0; i < cols; i++) {
-				moveRight(board, rows, cols);
+				moveRight(board);
 			}
 			break;
 		default:
@@ -199,7 +202,7 @@ public class twoThousandFortyEight {
 		}
 	}
 
-	private static void moveUp(int[][] board, int rows, int cols) {
+	private static void moveUp(int[][] board) {
 		for (int col = 0; col < cols; col++) {
 			for (int row = 1; row < rows; row++) {
 				if (board[row][col] != 0 && board[row - 1][col] == 0) {
@@ -209,8 +212,7 @@ public class twoThousandFortyEight {
 			}
 		}
 	}
-
-	private static void moveDown(int[][] board, int rows, int cols) {
+	private static void moveDown(int[][] board) {
 		for (int row = rows - 1; row > 0; row--) {
 			for (int col = 0; col < cols; col++) {
 				if (board[row - 1][col] != 0 && board[row][col] == 0) {
@@ -220,8 +222,7 @@ public class twoThousandFortyEight {
 			}
 		}
 	}
-
-	private static void moveLeft(int[][] board, int rows, int cols) {
+	private static void moveLeft(int[][] board) {
 		for (int col = 1; col < cols; col++) {
 			for (int row = 0; row < rows; row++) {
 				if (board[row][col] != 0 && board[row][col - 1] == 0) {
@@ -231,8 +232,7 @@ public class twoThousandFortyEight {
 			}
 		}
 	}
-
-	private static void moveRight(int[][] board, int rows, int cols) {
+	private static void moveRight(int[][] board) {
 		for (int col = cols - 1; col > 0; col--) {
 			for (int row = 0; row < rows; row++) {
 				if (board[row][col - 1] != 0 && board[row][col] == 0) {
@@ -243,7 +243,7 @@ public class twoThousandFortyEight {
 		}
 	}
 
-	private static void addNumber(int[][] board, int rows, int cols) {
+	private static void addNumber(int[][] board) {
 		Random rand = new Random();
 		boolean valid = false;
 		while (!valid) {
@@ -257,7 +257,7 @@ public class twoThousandFortyEight {
 		}
 	}
 
-	private static void printBoard(int[][] board, int rows, int cols, int characterLimit) {
+	private static void printBoard(int[][] board, int characterLimit) {
 		for (int row = 0; row < rows; row++) {
 			for (int col = 0; col < cols; col++) {
 				System.out.print("+");
