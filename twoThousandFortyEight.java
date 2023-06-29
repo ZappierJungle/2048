@@ -3,30 +3,66 @@ import java.util.Scanner;
 
 public class twoThousandFortyEight {
 	static boolean freeplay = false;
-	static int score = 0;
+	static int score;
 	static int rows = 4;
 	static int cols = 4;
+	static int characterLimit;
+	static int highScore;
+	static boolean playing = true;
 
 	public static void main(String[] args) {
 		Scanner scanner = new Scanner(System.in);
-		int characterLimit = 4;
 		int board[][] = new int[rows][cols];
+		while (playing) {
+			setUpBoard(board);
+			while (!gameEnd(board, scanner)) {
+				playerMove(board, scanner);
+				addNumber(board);
+				for (int row = 0; row < rows; row++) {
+					for (int col = 0; col < cols; col++) {
+						while (Integer.toString(board[row][col]).length() > characterLimit) {
+							characterLimit++;
+						}
+					}
+				}
+				printBoard(board, characterLimit);
+			}
+			System.out.println("Your score was " + score);
+			if (score > highScore) {
+				if(highScore != 0) {
+				System.out.println("You got a new high score!");
+				}
+				highScore = score;
+			} else {
+				System.out.println("Your high score is " + highScore);
+			}
+			System.out.println("Would you like to play again? Yes(y) or No(n)");
+			String input;
+			while (true) {
+				input = scanner.nextLine();
+				if (input.equals("y") || input.equals("n"))
+					break;
+				System.out.println("Invalid input ");
+			}
+			if (input.equals("n")) {
+				playing = false;
+				System.out.println("Thanks for playing!");
+			}
+		}
+		scanner.close();
+	}
+
+	private static void setUpBoard(int[][] board) {
+		for (int row = 0; row < rows; row++) {
+			for (int col = 0; col < cols; col++) {
+				board[row][col] = 0;
+			}
+		}
+		characterLimit = 4;
+		score = 0;
 		addNumber(board);
 		addNumber(board);
 		printBoard(board, characterLimit);
-		while (!gameEnd(board, scanner)) {
-			playerMove(board, scanner);
-			addNumber(board);
-			for (int row = 0; row < rows; row++) {
-				for (int col = 0; col < cols; col++) {
-					if (numberToString(board[row][col], characterLimit).length() > characterLimit)
-						characterLimit++;
-				}
-			}
-			printBoard(board, characterLimit);
-		}
-		System.out.println("Your final score was " + score);
-		scanner.close();
 	}
 
 	private static boolean gameEnd(int[][] board, Scanner scanner) {
@@ -50,7 +86,8 @@ public class twoThousandFortyEight {
 				}
 			}
 		}
-		if (validMove(board, "w", false) || validMove(board, "s", false) || validMove(board, "a", false) || validMove(board, "d", false)) {
+		if (validMove(board, "w", false) || validMove(board, "s", false) || validMove(board, "a", false)
+				|| validMove(board, "d", false)) {
 			return false;
 		}
 		System.out.println("You filled the board up and have no moves left, meaning you lost.");
@@ -250,7 +287,7 @@ public class twoThousandFortyEight {
 			int row = rand.nextInt(rows);
 			int col = rand.nextInt(cols);
 			if (board[row][col] == 0) {
-				int number = rand.nextInt(10) < 9 ? 3 : 6;
+				int number = rand.nextInt(10) < 9 ? 2 : 4;
 				board[row][col] = number;
 				valid = true;
 			}
