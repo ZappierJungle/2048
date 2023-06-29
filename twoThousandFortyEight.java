@@ -69,9 +69,9 @@ public class twoThousandFortyEight {
 		for (int row = 0; row < rows; row++) {
 			for (int col = 0; col < cols; col++) {
 				if (board[row][col] == 2048 && freeplay == false) {
-					System.out.println("Congratulations! You beat 2048");
+					System.out.println("Congratulations! You beat 2048!");
 					String input;
-					System.out.println("Would you like to continue? Yes(y) or No(n)");
+					System.out.println("Would you like to continue past 2048 and go for a higher score? Yes(y) or No(n)");
 					while (true) {
 						input = scanner.nextLine();
 						if (input.equals("y") || input.equals("n"))
